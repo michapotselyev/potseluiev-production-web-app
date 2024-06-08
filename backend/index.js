@@ -1,4 +1,5 @@
 import botStart from "./bot/bot.js";
+import { disconnectFromDB } from "./server/database/db.js";
 import server from "./server/server.js";
 import "dotenv/config";
 
@@ -24,3 +25,13 @@ function main() {
 }
 
 main();
+
+process.on("SIGTERM", () => {
+  console.log("SIGTERM received");
+
+  disconnectFromDB();
+
+  if (server) {
+    server.close();
+  }
+});

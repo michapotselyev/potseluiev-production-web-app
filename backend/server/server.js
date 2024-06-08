@@ -4,6 +4,8 @@ import helmet from "helmet";
 import xss from "xss-clean";
 import bodyParser from "body-parser";
 import cors from "cors";
+import AppRouter from './routers/index.router';
+import { connectToDB } from './database/db';
 
 const corsOptions = {
   origin: process.env.CORS_ORIGIN || "http://localhost:3000",
@@ -11,8 +13,10 @@ const corsOptions = {
   optionSuccessStatus: 200,
 };
 
+connectToDB();
+
 const app = express();
-// const appRouter = new AppRouter(app);
+const appRouter = new AppRouter(app);
 
 app.use(express.json());
 app.use(compression());
@@ -28,6 +32,6 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json({ limit: "1000mb" }));
 app.use(bodyParser.urlencoded({ extended: false, limit: "1000mb" }));
 
-// appRouter.init();
+appRouter.init();
 
 export default app;
